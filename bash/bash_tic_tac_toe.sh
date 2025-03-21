@@ -7,9 +7,14 @@ declare -a arr=(0 1 2 3 4 5 6 7 8)
 win=0
 illegitimate=true
 game_on=true
+draw=0
 
 draw_board(){
-echo -e "${arr[0]} ${arr[1]} ${arr[2]}\n${arr[3]} ${arr[4]} ${arr[5]}\n${arr[6]} ${arr[7]} ${arr[8]}"
+echo -e "${arr[0]} | ${arr[1]} | ${arr[2]}
+----------
+${arr[3]} | ${arr[4]} | ${arr[5]}
+----------
+${arr[6]} | ${arr[7]} | ${arr[8]}"
 }
 
 select_gamemode(){
@@ -23,6 +28,7 @@ select_gamemode(){
 }
 #winning conditions
 check_win(){
+
 if [[ ${arr[0]} == ${arr[1]} && ${arr[0]} == ${arr[2]} ]] || 
 [[ ${arr[0]} == ${arr[3]} && ${arr[0]} == ${arr[6]} ]] ||
 [[ ${arr[1]} == ${arr[4]} && ${arr[1]} == ${arr[7]} ]] ||
@@ -30,11 +36,38 @@ if [[ ${arr[0]} == ${arr[1]} && ${arr[0]} == ${arr[2]} ]] ||
 [[ ${arr[0]} == ${arr[4]} && ${arr[0]} == ${arr[8]} ]] || 
 [[ ${arr[2]} == ${arr[4]} && ${arr[2]} == ${arr[6]} ]] || 
 [[ ${arr[2]} == ${arr[5]} && ${arr[2]} == ${arr[8]} ]] || 
-[[ ${arr[6]} == ${arr[7]} && ${arr[6]} == ${arr[8]} ]];
-then echo "The end! Congratulations!" && game_on=false
+[[ ${arr[6]} == ${arr[7]} && ${arr[6]} == ${arr[8]} ]]
+then 
+echo "The end! Congratulations!"
+game_on=false
 fi
+
+
+if [[ $draw -eq 1 ]]
+then 
+echo "Draw! Better luck next time"
+game_on=false
+return
+fi
+
 }
 
+draw_check(){
+filled=0
+for i in "${!arr[@]}"
+do
+	if [[ ${arr[i]} == "o" ]] || [[ ${arr[i]} == "x" ]]
+	then filled=$((filled + 1))
+	else
+	continue
+	fi
+	
+	if [[ $filled -eq 9 ]]
+	then draw=1
+	break
+	fi
+done
+}
 #player1 turn
 player1(){
 while [ $illegitimate == true ]; do 
@@ -126,10 +159,18 @@ if [[ $gamemode == 1 ]];
 		while [ $game_on == true ]; do
 		player1
 		save
+		draw_check
 		check_win
+		if [[ $game_on == false ]]
+		then break
+		fi
 		player2
 		save
+		draw_check
 		check_win
+		if [[ $game_on == false ]]
+		then break
+		fi
 		done
 else 
 	draw_board
@@ -137,9 +178,17 @@ else
 	while [ $game_on == true ]; do
 	player1
 	save
+	draw_check
 	check_win
+	if [[ $game_on == false ]]
+	then break
+	fi
 	ai_turn
+	draw_check
 	check_win
+	if [[ $game_on == false ]]
+	then break
+	fi
 	done
 fi	
 }

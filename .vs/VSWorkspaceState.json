@@ -3,9 +3,8 @@
     "",
     "\\bash",
     "\\mario_js",
-    "\\mario_js\\public",
-    "\\mc_js"
+    "\\mario_js\\public"
   ],
-  "SelectedNode": "\\mario_js\\public\\simple_mario.png",
+  "SelectedNode": "\\mc_js",
   "PreviewInSolutionExplorer": false
 }

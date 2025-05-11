@@ -1,6 +1,6 @@
 const configuration = {
     type: Phaser.AUTO,
-    width: 800,
+    width: 1000,
     height: 600,
     physics: {
         default: 'arcade',
@@ -35,6 +35,10 @@ function preload() {
 
     this.load.image('ground', 'simple_mario.png')
 
+    this.load.image('foundation', 'base_ground.png')
+
+    this.load.image('obs', 'obstacle.png')
+
     this.load.image('point', 'star.png');
 
 }
@@ -47,16 +51,23 @@ function create() {
 
     platforms = this.physics.add.staticGroup();
 
-    platforms.create(350, 568, 'ground') //.setScale(2).refreshBody();
-    platforms.create(600, 450, 'ground');
-    platforms.create(50, 250, 'ground');
-    platforms.create(750, 220, 'ground');
+    platforms.create(70, 580, 'foundation')
+    platforms.create(450, 220, 'foundation')
+    platforms.create(450, 430, 'foundation')
+    platforms.create(900, 480, 'foundation')
+    platforms.create(130, 110, 'foundation')
+    platforms.create(790, 230, 'foundation')
+    platforms.create(50, 400, 'foundation')
+    platforms.create(420, 580, 'foundation')
 
-    platforms.create(450, 500, 'ground');
 
-    platforms.create(40, 550, 'ground');
-    platforms.create(100, 550, 'ground');
-    platforms.create(120, 650, 'ground');
+    //smaller obstacles
+    platforms.create(450, 580 - 36, 'obs')
+    platforms.create(700, 580 - 36, 'obs')
+    platforms.create(300, 580 - 36, 'obs')
+    platforms.create(800, 580 - 36, 'obs')
+    platforms.create(250, 300, 'obs')
+    platforms.create(140, 400 - 36, 'obs')
 
     //player
     player = this.physics.add.sprite(100, 450, 'dude')

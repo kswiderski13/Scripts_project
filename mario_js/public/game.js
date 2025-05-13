@@ -178,7 +178,7 @@ function collectStar(player, points) {
 //to review
 function hitEnemy(player, enemy) {
     const isJumpingOnEnemy =
-        player.body.velocity.y > 0 && enemy.body.touching.up &&nplayer.body.touching.down;
+        player.body.velocity.y > 0 && enemy.body.touching.up && player.body.touching.down;
 
     if (isJumpingOnEnemy) {
         enemy.disableBody(true, true);

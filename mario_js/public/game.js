@@ -23,6 +23,9 @@ let platforms;
 let points;
 let score = 0;
 let scorecount;
+let enemies;
+let life = 3;
+let lifeInfo;
 
 function preload() {
     // assets
@@ -40,6 +43,8 @@ function preload() {
     this.load.image('obs', 'obstacle.png')
 
     this.load.image('point', 'star.png');
+
+    this.load.image('bad', 'enemy.png')
 
 }
 
@@ -77,7 +82,6 @@ function create() {
 
     this.physics.add.collider(player, platforms);
 
-
     //points
     points = this.physics.add.group({
         key: 'point',
@@ -93,9 +97,26 @@ function create() {
     this.physics.add.overlap(player, points, collectStar, null, this);
 
 
+    //enemies
+    enemies = this.physics.add.group()
+
+    const enemy = enemies.create(399, 200, 'bad');
+    enemy.setBounce(0.2);
+    enemy.setCollideWorldBounds(true);
+    enemy.setVelocityX(100);
+
+    this.physics.add.collider(enemies, platforms)
+    this.physics.add.overlap(player, enemies, hitEnemy, null, this);
+
+
     scoreText = this.add.text(16, 16, 'Score: 0', {
         fontSize: '32px',
         fill: '#ffffff'
+    });
+
+    lifeInfo = this.add.text(800, 16, 'Life: 3', {
+        fontSize: '32px',
+        fill: '#d91a2d'
     });
 
     //animations
@@ -153,3 +174,25 @@ function collectStar(player, points) {
     scoreText.setText('Score: ' + score);
 }
 
+//enemies and damage
+//to review
+function hitEnemy(player, enemy) {
+    const isJumpingOnEnemy =
+        player.body.velocity.y > 0 && enemy.body.touching.up &&nplayer.body.touching.down;
+
+    if (isJumpingOnEnemy) {
+        enemy.disableBody(true, true);
+        score += 2;
+        scoreText.setText('Score: ' + score);
+        player.setVelocityY(-200);
+    } else {
+        if (!enemy.disabled) {
+            life--;
+            lifeInfo.setText('Life: ' + life);
+        }
+    }
+
+    if (life <= 0) {
+        this.scene.restart();
+    }
+}

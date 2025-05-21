@@ -10,9 +10,9 @@ function love.load()
     ypos = 0
     timer = 0
 
-    maxposy = 20
+    --[[ maxposy = 20
     minposx = 1
-    maxposx = 10
+    maxposx = 10 ]]
 
     grid = {}
     for y = 1, boardY do
@@ -141,8 +141,31 @@ function love.load()
 
 
     function validMove(testX, testY, testRotation)
-        return true
+    local shape = pieces[blockType][testRotation]
+
+    for y = 1, 4 do
+        for x = 1, 4 do
+            if shape[y][x] ~= '0' then
+                local boardXpos = testX + x
+                local boardYpos = testY + y
+
+                --left
+                if boardXpos < 1 or boardXpos > boardX or boardYpos > boardY then
+                    return false
+                end
+                
+                --right
+                if boardYpos >= 1 then
+                    if grid[boardYpos][boardXpos] ~= '0' then
+                    return false
+                    end
+                end
+            end
+        end
     end
+
+    return true
+end
 
 --testing colors
 --[[
@@ -167,15 +190,35 @@ function love.update(dt)
     timer = timer + dt
     if timer > 0.5 then
         timer = 0
-        ypos = ypos + 1
 
-        --checking if pieces can move
         local checkY = ypos + 1
         if validMove(xpos, checkY, blockRotation) then
             ypos = checkY
+        else
+            -- blocks in grid
+            local shape = pieces[blockType][blockRotation]
+            for y = 1, 4 do
+                for x = 1, 4 do
+                    if shape[y][x] ~= '0' then
+                        --actual position on board
+                        local gx = xpos + x - 1
+                        local gy = ypos + y - 1
+                        if gy >= 1 then
+                            grid[gy][gx] = shape[y][x]
+                        end
+                    end
+                end
+            end
+
+            --generating new piece
+            blockType = love.math.random(#pieces)
+            blockRotation = love.math.random(#pieces[blockType])
+            xpos = 4
+            ypos = 0
         end
     end
 end
+
 
 function love.draw()
     --drawing board
@@ -256,14 +299,15 @@ function love.keypressed(key)
     end
 
     if key == 'right' then
-        local testX = pieceX + 1
+        local testX = xpos + 1
         if validMove(testX, ypos, blockRotation) then
             xpos = testX
         end
         
-    elseif key == 'right' then
-        local testX = pieceX - 1
+    elseif key == 'left' then
+        local testX = xpos - 1
         if validMove(testX, ypos, blockRotation) then
             xpos = testX
         end
+    end
 end

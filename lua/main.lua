@@ -1,6 +1,6 @@
 function love.load()
     love.window.setTitle("Tetris at home")
-    love.window.setMode(800, 600)
+    love.window.setMode(270, 400)
     love.graphics.setBackgroundColor(255,255,255)
 
     size = 20
@@ -9,11 +9,13 @@ function love.load()
     xpos = 4
     ypos = 0
     timer = 0
+    score = 0
 
     --[[ maxposy = 20
     minposx = 1
     maxposx = 10 ]]
 
+    --board grid
     grid = {}
     for y = 1, boardY do
        grid[y] = {}  
@@ -166,24 +168,32 @@ function love.load()
 
     return true
 end
+end
 
---testing colors
---[[
-    grid[20][1] = 'b1'
-    grid[19][2] = 'b2'
-    grid[18][3] = 'b3'
-    grid[17][4] = 'b4'
-    grid[16][5] = 'b5'
-]]--
-   --[[ board = {}
-    for y=1, boardH do
-        board[y] = {}
-
-        for x = 1, boardW do
-            board[y][x] = 0
+--deleting full lines and scoring points
+function clear()
+    for y = boardY, 1, -1 do
+        local fullLine = true
+        for x = 1, boardX do
+            if grid[y][x] == '0' then
+            fullLine = false
+            break
+            end
         end
+        if fullLine then
+            for yy = 20, 2, -1 do
+                for xx = 1, boardX do
+                    grid[yy][xx] = grid[yy - 1][xx]
+                end
+            end
+            score = score + 10
+        end
+
+        for firstRow = 1, boardX do
+            grid[1][firstRow] = '0'
+        end
+        y = y + 1
     end
-    ]]--
 end
 
 function love.update(dt)
@@ -201,14 +211,16 @@ function love.update(dt)
                 for x = 1, 4 do
                     if shape[y][x] ~= '0' then
                         --actual position on board
-                        local gx = xpos + x - 1
-                        local gy = ypos + y - 1
+                        local gx = xpos + x --- 1
+                        local gy = ypos + y --- 1
                         if gy >= 1 then
                             grid[gy][gx] = shape[y][x]
                         end
                     end
                 end
             end
+
+            clear()
 
             --generating new piece
             blockType = love.math.random(#pieces)
@@ -273,6 +285,9 @@ function love.draw()
     local color = colors[block]
     love.graphics.setColor(color)
     ]]--
+
+    
+    love.graphics.print("Score: " .. score, 200,30)
 end
 
 function love.keypressed(key)
@@ -310,4 +325,8 @@ function love.keypressed(key)
             xpos = testX
         end
     end
+
+    --[[ if key == 'c' then
+
+    end ]]
 end

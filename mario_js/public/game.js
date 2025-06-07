@@ -57,7 +57,7 @@ function create() {
     platforms = this.physics.add.staticGroup();
 
     platforms.create(70, 580, 'foundation')
-    platforms.create(450, 220, 'foundation')
+    platforms.create(450, 320, 'foundation')
     platforms.create(450, 430, 'foundation')
     platforms.create(900, 480, 'foundation')
     platforms.create(130, 110, 'foundation')
@@ -101,9 +101,9 @@ function create() {
     enemies = this.physics.add.group()
 
     const enemy = enemies.create(399, 200, 'bad');
-    enemy.setBounce(0.2);
+    enemy.setBounce(0.3);
     enemy.setCollideWorldBounds(true);
-    enemy.setVelocityX(100);
+    enemy.setVelocityX(-50);
 
     this.physics.add.collider(enemies, platforms)
     this.physics.add.overlap(player, enemies, hitEnemy, null, this);

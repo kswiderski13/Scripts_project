@@ -60,5 +60,5 @@ async def results(ctx, player):
     response = ollama.chat(model="llama3", messages=chat)
     await ctx.send(response['message']['content'])
 
-
+#these commits aren't my best work
 bot.run(TOKEN)

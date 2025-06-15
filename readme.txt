@@ -70,7 +70,7 @@ Kod: https://github.com/kswiderski13/Scripts_project/tree/main/lua
 
 Zadanie 6 Czatbot esportLLM
 
-✅ 3.0 https://github.com/kswiderski13/Scripts_project/commit/1a9ab2c8b76ca0df071930a7dfca3c2bf7f11aed
+✅ 3.0 https://github.com/kswiderski13/Scripts_project/commit/1b66768d07c4e4785efd830b6bb4216dc1a76bfc
 
 ❌ 3.5 wymaganie 2 Link do commita2
 

@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import ollama
 
-TOKEN = 'MTM4Mzg2ODMxNjM3NTk3MzkxOA.GP08f1.VTgNU07FIGZf8QABA3EKWKoIl8K4CUiZqNQAHo'
+TOKEN = 'PLACEHOLDER' #hiding my discord bot token as I'm not supposed to show it freely
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -21,8 +21,8 @@ async def signup(ctx, tournament):
     user_id = str(ctx.author.id)
     user_chats[user_id] = [
         {"role": "system", "content": "You're a bot that helps users register to e-sport tournaments. You are professional but you like to say some brainrot words"},
-        {"role": "user", "content": f"I want to participate in {tournament}"}
-    ]
+        {"role": "user", "content": f"I want to participate in {tournament}"}]
+
     response = ollama.chat(model="llama3", messages=user_chats[user_id])
     user_chats[user_id].append({"role": "assistant", "content": response['message']['content']})
     await ctx.send(response['message']['content'])
@@ -59,5 +59,6 @@ async def results(ctx, player):
     ]
     response = ollama.chat(model="llama3", messages=chat)
     await ctx.send(response['message']['content'])
+
 
 bot.run(TOKEN)
